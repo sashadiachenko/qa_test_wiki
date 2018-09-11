@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -26,18 +27,8 @@ public class SearchResultTwoSmartPhones {
     @FindBy(xpath = "//div[@class='item-compare']/span")
     private WebElement comparisonButton;
 
-    @FindBy(xpath = "//div[@data-dropdown-id='compare']")
-    private WebElement compare;
-
-   // @FindBy(xpath = "//a[contains(text(),'Смартфоны и мобильные телефоны')]")
-    @FindBy(xpath = "//*[@id='page-catalog']/header/div[1]/div/div/div[2]/div[3]/div[2]/div/ul/li[1]")
+    @FindBy(xpath = "//a[contains(text(),'Смартфоны и мобильные телефоны')]")
     private WebElement finalComparisonButton;
-
-    @FindBy(xpath = "//a[contains(text(),'Xiaomi Redmi Note 5 4/64GB Black')]")
-    private WebElement firstPhone;
-
-    @FindBy(xpath = "//a[contains(text(),'Samsung Galaxy Note9 6/128GB Ocean Blue')]")
-    private WebElement secondPhone;
 
     @FindBy(xpath = "//*[contains(text(),'Очистить список \"Cравнения\"')]")
     private WebElement clearButton;
@@ -47,12 +38,16 @@ public class SearchResultTwoSmartPhones {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
+    private static ComparisonOfTwoProducts comparisonOfTwoProducts;
 
     public SearchResultTwoSmartPhones(final WebDriver driver){
         this.driver = driver;
         PageFactory.initElements(driver, this);
 
         clickCheckboxs(driver);
+        switchToNewPage(driver);
+        deletePhones(driver);
+
 
 
     }
@@ -71,32 +66,14 @@ public class SearchResultTwoSmartPhones {
        wait.until(ExpectedConditions.visibilityOf(comparisonButton));
        comparisonButton.click();
 
-       wait.until(ExpectedConditions.elementToBeClickable(compare));
-       driver.manage().timeouts().implicitlyWait(40,TimeUnit.SECONDS);
+       wait.until(ExpectedConditions.visibilityOf(finalComparisonButton));
 
-        JavascriptExecutor js = (JavascriptExecutor)driver;
-        js.executeScript("arguments[0].click();", finalComparisonButton);
+       JavascriptExecutor js = (JavascriptExecutor)driver;
+       js.executeScript("arguments[0].click();", finalComparisonButton);
 
-        switchToNewPage(driver);
-
-        clickCheckboxs(driver);
+       }
 
 
-
-
-
-
-     }
-
-     public String getTextFirstPhone(){
-        String testPhone = firstPhone.getText();
-        return testPhone;
-     }
-
-    public String getTextSecondPhone(){
-        String testPhone = secondPhone.getText();
-        return testPhone;
-    }
 
 
     public void switchToNewPage(final WebDriver driver){
@@ -105,20 +82,39 @@ public class SearchResultTwoSmartPhones {
         for(String winHandle : driver.getWindowHandles()) {
             driver.switchTo().window(winHandle);
         }
+        ComparisonOfTwoProducts comparisonOfTwoProducts = new ComparisonOfTwoProducts(driver);
+
+
         driver.close();
 
-        driver.switchTo().window(winHandleBefore);
+       driver.switchTo().window(winHandleBefore);
     }
-    public void clearButton(WebDriver driver){
-        comparisonButton.click();
+
+    public void deletePhones(final WebDriver driver){
         wait.until(ExpectedConditions.visibilityOf(clearButton));
 
         JavascriptExecutor js = (JavascriptExecutor)driver;
         js.executeScript("arguments[0].click();", clearButton);
+
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+
+        wait.until(ExpectedConditions.visibilityOf(clearButton));
+
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", comparisonButton);
+        wait.until(ExpectedConditions.visibilityOf(comparisonButton));
+
+        comparisonButton.click();
+        // JavascriptExecutor jsq = (JavascriptExecutor)driver;
+       // jsq.executeScript("arguments[0].click();", comparisonButton);
+
+
     }
 
+
+
+
     public String getTextClearButton(){
-        String text = clearButton.getText();
+        String text = checkClearButton.getText();
         return text;
     }
 }
