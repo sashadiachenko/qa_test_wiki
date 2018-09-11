@@ -36,6 +36,9 @@ public class SearchResultTwoSmartPhones {
     @FindBy(xpath = "//*[contains(text(),'Ваш список \"Сравнения\" пуст.')]")
     private WebElement checkClearButton;
 
+    @FindBy(xpath = "//a[contains(text(),'HUAWEI P smart+ 4/64GB Black')]")
+    private WebElement phone;
+
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static ComparisonOfTwoProducts comparisonOfTwoProducts;
@@ -96,16 +99,12 @@ public class SearchResultTwoSmartPhones {
         JavascriptExecutor js = (JavascriptExecutor)driver;
         js.executeScript("arguments[0].click();", clearButton);
 
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
-        wait.until(ExpectedConditions.visibilityOf(clearButton));
-
+        wait.until(ExpectedConditions.visibilityOf(phone));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", comparisonButton);
-        wait.until(ExpectedConditions.visibilityOf(comparisonButton));
 
-        comparisonButton.click();
-        // JavascriptExecutor jsq = (JavascriptExecutor)driver;
-       // jsq.executeScript("arguments[0].click();", comparisonButton);
+         JavascriptExecutor jsq = (JavascriptExecutor)driver;
+        jsq.executeScript("arguments[0].click();", comparisonButton);
 
 
     }
