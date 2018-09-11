@@ -103,7 +103,7 @@ public class SearchResultTwoSmartPhones {
         wait.until(ExpectedConditions.visibilityOf(phone));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", comparisonButton);
 
-         JavascriptExecutor jsq = (JavascriptExecutor)driver;
+        JavascriptExecutor jsq = (JavascriptExecutor)driver;
         jsq.executeScript("arguments[0].click();", comparisonButton);
 
 
